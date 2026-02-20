@@ -1,10 +1,14 @@
 # KOSPI Comparison (코스피 비교 분석)
 
+[English Version](README_en.md)
+
 현재의 코스피(KOSPI) 지수와 1980년대 3저 호황기 시절(1983년 6월 ~ 1987년 12월)의 코스피 지수를 비교 분석하여 시각화하는 프로젝트입니다.
 
 매일 자동으로 업데이트되는 차트를 통해 과거의 시장 흐름과 현재의 지수 움직임을 비교할 수 있습니다.
 
-👉 **실시간 차트 확인하기**: [https://k-sunshine-log.github.io/kospi-comparison/](https://k-sunshine-log.github.io/kospi-comparison/)
+👉 **실시간 차트 확인하기**:
+- [한국어 버전](https://k-sunshine-log.github.io/kospi-comparison/)
+- [영어 버전](https://k-sunshine-log.github.io/kospi-comparison/index_en.html)
 
 ## 주요 기능 (Features)
 
