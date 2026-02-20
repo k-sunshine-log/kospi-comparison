@@ -33,7 +33,9 @@ jobs:
           python main.py
           mkdir -p public
           cp index.html public/
+          cp index_en.html public/
           mv kospi_chart.png public/
+          mv kospi_chart_en.png public/
         env:
           MPLBACKEND: Agg # 중요: CI 환경에서 GUI 백엔드 사용 안 함
 

@@ -18,6 +18,26 @@
         }
         h1 {
             color: #87CEEB;
+            text-align: center;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        .controls a {
+            color: #87CEEB;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #87CEEB;
+            border-radius: 5px;
+            margin: 0 5px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .controls a:hover {
+            background-color: rgba(135, 206, 235, 0.2);
+        }
+        .controls a.active {
+            background-color: #87CEEB;
+            color: #121212;
         }
         img {
             max-width: 90%;
@@ -34,6 +54,11 @@
     </style>
 </head>
 <body>
+    <div class="controls">
+        <span style="margin-right: 10px; color: #aaa;">Language:</span>
+        <a href="index.html" class="active">한국어</a>
+        <a href="index_en.html">English</a>
+    </div>
     <h1>KOSPI 비교: 현재 vs 1980년대 호황기</h1>
     <img src="kospi_chart.png" alt="KOSPI Comparison Chart">
     <div class="footer">

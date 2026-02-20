@@ -18,7 +18,7 @@ plt.rcParams['axes.unicode_minus'] = False
 plt.style.use('dark_background')
 
 
-def plot_kospi_comparison():
+def plot_kospi_comparison(lang='ko'):
     # 1. 데이터 다운로드 (FinanceDataReader)
     # 현재 데이터: 2023년 1월 1일 ~ 현재
     # KS11: KOSPI 지수
@@ -76,22 +76,30 @@ def plot_kospi_comparison():
     # 3. 시각화
     plt.figure(figsize=(14, 8))
 
+    label_past = f'1980년대 3저 호황기 패턴 (1983.06~, x{scale_ratio:.2f})' if lang == 'ko' else f'1980s Boom Period Pattern (1983.06~, x{scale_ratio:.2f})'
+    label_curr = '현재 코스피 (2023-06-01~)' if lang == 'ko' else 'Current KOSPI (2023-06-01~)'
+
     # 과거 패턴 - 일봉 표시
     plt.plot(df_past['Mapped_Date'], df_past['Scaled_Close'],
-             label=f'1980년대 3저 호황기 패턴 (1983.06~, x{scale_ratio:.2f})',
+             label=label_past,
              color='#FFB6C1', linestyle='--', linewidth=1.5, alpha=0.8) # LightPink, 점선
 
     # 현재 코스피 - 색상 변경 (파스텔 블루/스카이 블루), 눈이 편안한 색상
     plt.plot(df_curr['Mapped_Date'], df_curr['Close'],
-             label='현재 코스피 (2023-06-01~)',
+             label=label_curr,
              color='#87CEEB', linewidth=2) # SkyBlue
 
     # 4. 차트 꾸미기
-    plt.title("코스피 비교: 현재 vs 1980년대 호황기", fontsize=16, fontweight='bold', color='white')
+    title = "코스피 비교: 현재 vs 1980년대 호황기" if lang == 'ko' else "KOSPI Comparison: Current vs 1980s Boom Period"
+    plt.title(title, fontsize=16, fontweight='bold', color='white')
     kst = timezone(timedelta(hours=9))
     now_str = datetime.now(kst).strftime('%Y-%m-%d %H:%M')
-    plt.xlabel(f"날짜 ({now_str} 기준)", fontsize=12, color='white')
-    plt.ylabel("지수 포인트", fontsize=12, color='white')
+
+    xlabel = f"날짜 ({now_str} 기준)" if lang == 'ko' else f"Date (As of {now_str})"
+    ylabel = "지수 포인트" if lang == 'ko' else "Index Points"
+
+    plt.xlabel(xlabel, fontsize=12, color='white')
+    plt.ylabel(ylabel, fontsize=12, color='white')
     plt.grid(True, linestyle=':', alpha=0.4, color='gray')
 
     # 범례 설정
@@ -103,7 +111,8 @@ def plot_kospi_comparison():
 
     # annotate 텍스트 설정 (화살표 제거 요청 반영)
     # 텍스트 위치는 계속 왼쪽 위 유지
-    plt.annotate(f'현재: {last_price:.0f}',
+    annotate_text = f'현재: {last_price:.0f}' if lang == 'ko' else f'Current: {last_price:.0f}'
+    plt.annotate(annotate_text,
                  xy=(last_date, last_price),
                  xytext=(last_date - pd.Timedelta(days=80), last_price + 150),
                  ha='center', # 가로 중앙 정렬
@@ -116,14 +125,11 @@ def plot_kospi_comparison():
     plt.xticks(rotation=45)
 
     plt.tight_layout()
-    plt.savefig('kospi_chart.png') # 이미지 파일로 저장
-    # plt.show() # CI 환경에서는 주석 처리하거나 조건부 실행 필요. 로컬 확인용으로 유지하되, CI에서는 에러가 날 수 있음.
-    # 하지만 plt.savefig 후에 plt.show()를 호출하면 문제 없음 (backend 설정에 따라 다름)
-    try:
-        plt.show()
-    except Exception as e:
-        print(f"Skipping plt.show() due to error (likely no display environment): {e}")
+    filename = 'kospi_chart.png' if lang == 'ko' else 'kospi_chart_en.png'
+    plt.savefig(filename) # 이미지 파일로 저장
+    plt.close() # 메모리 해제 및 중복 출력 방지
 
 # 함수 실행
 if __name__ == "__main__":
-    plot_kospi_comparison()
+    plot_kospi_comparison(lang='ko')
+    plot_kospi_comparison(lang='en')
