@@ -1,0 +1,48 @@
+name: Update KOSPI Chart
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 7 * * 1-5' # 매일 평일 오후 4시에 실행 (한국 시간 16시, UTC 07시)
+  workflow_dispatch: # 수동 실행 가능하도록 설정
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # gh-pages 브랜치에 쓰기 권한 필요
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-nanum
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate Chart
+        run: |
+          python main.py
+          mkdir -p public
+          cp index.html public/
+          mv kospi_chart.png public/
+        env:
+          MPLBACKEND: Agg # 중요: CI 환경에서 GUI 백엔드 사용 안 함
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public # public 폴더 내용을 gh-pages 브랜치로 배포
+          force_orphan: true # gh-pages 브랜치를 새로 생성 (이전 커밋 기록 없이)
+          commit_message: "Auto-deploy chart [skip ci]"
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
